@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barème RP — Notation des Joueurs</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Rubik:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0b0f;
+    --surface: #10121a;
+    --card: #161924;
+    --border: #1e2235;
+    --accent: #00d4ff;
+    --accent2: #ff6b35;
+    --gold: #ffd700;
+    --text: #e8eaf0;
+    --muted: #5a6080;
+    --success: #00e676;
+    --danger: #ff1744;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rubik', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 50% at 20% 10%, rgba(0,212,255,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 90%, rgba(255,107,53,0.05) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* GRID LINES */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* HEADER */
+  header {
+    position: relative;
+    z-index: 10;
+    padding: 32px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    background: rgba(10,11,15,0.8);
+    backdrop-filter: blur(10px);
+  }
+
+  .logo {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .logo span {
+    color: var(--accent);
+    text-shadow: 0 0 20px rgba(0,212,255,0.5);
+  }
+
+  .logo-sub {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 4px;
+    margin-top: 2px;
+  }
+
+  /* MAIN */
+  main {
+    position: relative;
+    z-index: 10;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 40px;
+  }
+
+  /* HERO */
+  .hero {
+    text-align: center;
+    margin-bottom: 70px;
+  }
+
+  .hero-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 5px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    opacity: 0.8;
+  }
+
+  .hero h1 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(48px, 7vw, 80px);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+    text-shadow: 0 0 40px rgba(0,212,255,0.4);
+  }
+
+  .hero p {
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 500px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+  }
+
+  /* CTA BUTTON */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 16px 40px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: -1;
+  }
+
+  .btn-primary:hover::before { transform: translateX(0); }
+  .btn-primary:hover { color: var(--bg); box-shadow: 0 0 30px rgba(0,212,255,0.3); }
+
+  .btn-icon {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s;
+  }
+
+  .btn-primary:hover .btn-icon { transform: translateX(4px); }
+
+  /* PUBLISHED REPORTS */
+  .section-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .reports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+
+  .report-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+    cursor: pointer;
+  }
+
+  .report-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--accent);
+  }
+
+  .report-card:hover {
+    border-color: rgba(0,212,255,0.3);
+    transform: translateY(-2px);
+  }
+
+  .report-card.danger::before { background: var(--danger); }
+  .report-card.warning::before { background: var(--accent2); }
+  .report-card.success::before { background: var(--success); }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+
+  .player-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .score-badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 22px;
+    font-weight: bold;
+    padding: 4px 12px;
+    border: 1px solid;
+  }
+
+  .score-badge.high { color: var(--success); border-color: var(--success); }
+  .score-badge.mid { color: var(--accent2); border-color: var(--accent2); }
+  .score-badge.low { color: var(--danger); border-color: var(--danger); }
+
+  .card-criteria {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .crit-item {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .crit-item span { color: var(--text); }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+    font-style: italic;
+  }
+
+  .card-date {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 10px;
+    opacity: 0.6;
+  }
+
+  .empty-state {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 60px;
+    border: 1px dashed var(--border);
+    color: var(--muted);
+  }
+
+  .empty-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.3;
+  }
+
+  /* MODAL OVERLAY */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(6px);
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .overlay.active { display: flex; }
+
+  /* MODAL */
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    width: 100%;
+    max-width: 640px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    animation: slideUp 0.3s ease;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .modal-header {
+    padding: 28px 32px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    z-index: 1;
+  }
+
+  .modal-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .modal-title span { color: var(--accent); }
+
+  .close-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .close-btn:hover { border-color: var(--danger); color: var(--danger); }
+
+  .modal-body { padding: 32px; }
+
+  /* FORM */
+  .form-section {
+    margin-bottom: 32px;
+  }
+
+  .form-section-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  label {
+    font-size: 12px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  input[type="text"], textarea {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 16px;
+    font-family: 'Rubik', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  input[type="text"]:focus, textarea:focus {
+    border-color: var(--accent);
+  }
+
+  textarea { resize: vertical; min-height: 80px; }
+
+  /* CRITERIA GRID */
+  .criteria-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .criterion-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    transition: border-color 0.2s;
+  }
+
+  .criterion-row:hover { border-color: rgba(0,212,255,0.2); }
+
+  .criterion-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    width: 24px;
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+
+  .criterion-name {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .criterion-name small {
+    display: block;
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 400;
+    margin-top: 2px;
+  }
+
+  .score-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .score-input {
+    background: var(--bg) !important;
+    border: 1px solid var(--border) !important;
+    color: var(--text) !important;
+    width: 60px !important;
+    padding: 8px !important;
+    text-align: center !important;
+    font-family: 'Share Tech Mono', monospace !important;
+    font-size: 18px !important;
+    font-weight: bold;
+  }
+
+  .score-max {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* AVERAGE DISPLAY */
+  .average-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+
+  .average-box::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+
+  .avg-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .avg-value {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 64px;
+    font-weight: 700;
+    line-height: 1;
+    transition: color 0.3s;
+  }
+
+  .avg-suffix {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 20px;
+    color: var(--muted);
+  }
+
+  /* PUBLISH BUTTON */
+  .btn-publish {
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    padding: 18px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .btn-publish::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--accent), rgba(0,212,255,0.7));
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    z-index: 0;
+  }
+
+  .btn-publish:hover::before { transform: translateY(0); }
+  .btn-publish:hover { color: var(--bg); }
+  .btn-publish span { position: relative; z-index: 1; }
+
+  /* SUCCESS FLASH */
+  .flash {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    background: var(--card);
+    border: 1px solid var(--success);
+    color: var(--success);
+    padding: 16px 24px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    z-index: 200;
+    animation: flashIn 0.3s ease, flashOut 0.3s ease 2.5s forwards;
+  }
+
+  @keyframes flashIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes flashOut {
+    to { opacity: 0; transform: translateX(20px); }
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+  @media (max-width: 600px) {
+    header { padding: 20px; }
+    main { padding: 40px 20px; }
+    .form-row { grid-template-columns: 1fr; }
+    .modal-body { padding: 20px; }
+    .modal-header { padding: 20px; }
+    .card-criteria { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">RP<span>JUDGE</span></div>
+    <div class="logo-sub">Système de notation des joueurs</div>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="hero-tag">// évaluation roleplay</div>
+    <h1>Notez vos<br><em>joueurs RP</em></h1>
+    <p>Un système de barème précis pour évaluer la qualité du jeu de rôle. Créez des rapports détaillés et publiez-les en un clic.</p>
+    <button class="btn-primary" onclick="openModal()">
+      <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M5 12h14"/>
+      </svg>
+      Nouveau Rapport
+    </button>
+  </div>
+
+  <div class="section-title">Rapports publiés</div>
+  <div class="reports-grid" id="reportsGrid">
+    <div class="empty-state">
+      <div class="empty-icon">📋</div>
+      <div>Aucun rapport publié pour le moment</div>
+      <div style="font-size:13px;margin-top:8px;">Créez votre premier rapport en cliquant sur "Nouveau Rapport"</div>
+    </div>
+  </div>
+</main>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-title">Nouveau <span>Rapport</span></div>
+      <button class="close-btn" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- IDENTITÉ JOUEUR -->
+      <div class="form-section">
+        <div class="form-section-title">// Identité du joueur</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Prénom RP</label>
+            <input type="text" id="prenomRP" placeholder="ex: Marcus">
+          </div>
+          <div class="form-group">
+            <label>Nom RP</label>
+            <input type="text" id="nomRP" placeholder="ex: Reyes">
+          </div>
+        </div>
+      </div>
+
+      <!-- BARÈME -->
+      <div class="form-section">
+        <div class="form-section-title">// Barème de notation /10</div>
+        <div class="criteria-grid">
+
+          <div class="criterion-row">
+            <div class="criterion-num">01</div>
+            <div class="criterion-name">
+              Activité
+              <small>Présence et implication générale</small>
+            </div>
+            <div class="score-input-wrap">
+              <input type="number" class="score-input" id="score1" min="0" max="10" placeholder="0" oninput="updateAverage()">
+              <span class="score-max">/10</span>
+            </div>
+          </div>
+
+          <div class="criterion-row">
+            <div class="criterion-num">02</div>
+            <div class="criterion-name">
+              RP
+              <small>Fear Pain Serious</small>
+            </div>
+            <div class="score-input-wrap">
+              <input type="number" class="score-input" id="score2" min="0" max="10" placeholder="0" oninput="updateAverage()">
+              <span class="score-max">/10</span>
+            </div>
+          </div>
+
+          <div class="criterion-row">
+            <div class="criterion-num">03</div>
+            <div class="criterion-name">
+              Metagaming
+              <small>Respect des informations IRL/IG</small>
+            </div>
+            <div class="score-input-wrap">
+              <input type="number" class="score-input" id="score3" min="0" max="10" placeholder="0" oninput="updateAverage()">
+              <span class="score-max">/10</span>
+            </div>
+          </div>
+
+          <div class="criterion-row">
+            <div class="criterion-num">04</div>
+            <div class="criterion-name">
+              Cohérence RP
+              <small>Logique et continuité du personnage</small>
+            </div>
+            <div class="score-input-wrap">
+              <input type="number" class="score-input" id="score4" min="0" max="10" placeholder="0" oninput="updateAverage()">
+              <span class="score-max">/10</span>
+            </div>
+          </div>
+
+          <div class="criterion-row">
+            <div class="criterion-num">05</div>
+            <div class="criterion-name">
+              Safe RP
+              <small>Respect des limites et sécurité</small>
+            </div>
+            <div class="score-input-wrap">
+              <input type="number" class="score-input" id="score5" min="0" max="10" placeholder="0" oninput="updateAverage()">
+              <span class="score-max">/10</span>
+            </div>
+          </div>
+
+          <div class="criterion-row">
+            <div class="criterion-num">06</div>
+            <div class="criterion-name">
+              Loose RP
+              <small>Flexibilité et adaptation</small>
+            </div>
+            <div class="score-input-wrap">
+              <input type="number" class="score-input" id="score6" min="0" max="10" placeholder="0" oninput="updateAverage()">
+              <span class="score-max">/10</span>
+            </div>
+          </div>
+
+          <div class="criterion-row">
+            <div class="criterion-num">07</div>
+            <div class="criterion-name">
+              HRP
+              <small>Comportement hors roleplay</small>
+            </div>
+            <div class="score-input-wrap">
+              <input type="number" class="score-input" id="score7" min="0" max="10" placeholder="0" oninput="updateAverage()">
+              <span class="score-max">/10</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- MOYENNE -->
+      <div class="average-box">
+        <div class="avg-label">Moyenne générale</div>
+        <div class="avg-value" id="avgDisplay" style="color: var(--muted)">—<span class="avg-suffix" style="font-size:30px"></span></div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;font-family:'Share Tech Mono',monospace" id="avgSub">Saisissez les notes pour calculer la moyenne</div>
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div class="form-section">
+        <div class="form-section-title">// Description / Observations</div>
+        <div class="form-group">
+          <textarea id="description" placeholder="Ajoutez vos observations sur le joueur, ses points forts, ses axes d'amélioration..."></textarea>
+        </div>
+      </div>
+
+      <!-- PUBLISH -->
+      <button class="btn-publish" onclick="publishReport()">
+        <span>▶ Publier le rapport</span>
+      </button>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  const criteriaNames = [
+    'Activité',
+    'RP (Fear Pain Serious)',
+    'Metagaming',
+    'Cohérence RP',
+    'Safe RP',
+    'Loose RP',
+    'HRP'
+  ];
+
+  let reports = [];
+
+  function openModal() {
+    document.getElementById('overlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    // Reset form
+    ['prenomRP','nomRP','description'].forEach(id => document.getElementById(id).value = '');
+    for(let i=1;i<=7;i++) document.getElementById('score'+i).value = '';
+    updateAverage();
+  }
+
+  function closeModal() {
+    document.getElementById('overlay').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function handleOverlayClick(e) {
+    if(e.target === document.getElementById('overlay')) closeModal();
+  }
+
+  function clamp(v) {
+    let n = parseFloat(v);
+    if(isNaN(n)) return null;
+    return Math.min(10, Math.max(0, n));
+  }
+
+  function updateAverage() {
+    let scores = [];
+    for(let i=1;i<=7;i++) {
+      let v = clamp(document.getElementById('score'+i).value);
+      if(v !== null) scores.push(v);
+    }
+
+    const avgEl = document.getElementById('avgDisplay');
+    const subEl = document.getElementById('avgSub');
+
+    if(scores.length === 0) {
+      avgEl.innerHTML = '—';
+      avgEl.style.color = 'var(--muted)';
+      subEl.textContent = 'Saisissez les notes pour calculer la moyenne';
+      return;
+    }
+
+    const avg = scores.reduce((a,b)=>a+b,0) / scores.length;
+    const rounded = Math.round(avg * 10) / 10;
+
+    avgEl.innerHTML = `${rounded}<span class="avg-suffix">/10</span>`;
+
+    let color, label;
+    if(avg >= 7) { color = 'var(--success)'; label = `${scores.length}/7 critères notés — Excellent joueur`; }
+    else if(avg >= 5) { color = 'var(--accent2)'; label = `${scores.length}/7 critères notés — Joueur moyen`; }
+    else { color = 'var(--danger)'; label = `${scores.length}/7 critères notés — À améliorer`; }
+
+    avgEl.style.color = color;
+    subEl.textContent = label;
+  }
+
+  function publishReport() {
+    const prenom = document.getElementById('prenomRP').value.trim();
+    const nom = document.getElementById('nomRP').value.trim();
+
+    if(!prenom || !nom) {
+      alert('Veuillez renseigner le prénom et le nom RP du joueur.');
+      return;
+    }
+
+    let scores = [];
+    for(let i=1;i<=7;i++) {
+      let v = clamp(document.getElementById('score'+i).value);
+      scores.push(v);
+    }
+
+    const validScores = scores.filter(s => s !== null);
+    if(validScores.length === 0) {
+      alert('Veuillez saisir au moins une note.');
+      return;
+    }
+
+    const avg = validScores.reduce((a,b)=>a+b,0) / validScores.length;
+    const desc = document.getElementById('description').value.trim();
+
+    const report = {
+      id: Date.now(),
+      prenom, nom,
+      scores,
+      avg: Math.round(avg * 10) / 10,
+      desc,
+      date: new Date().toLocaleDateString('fr-FR', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' })
+    };
+
+    reports.unshift(report);
+    renderReports();
+    closeModal();
+    showFlash('Rapport publié avec succès !');
+  }
+
+  function renderReports() {
+    const grid = document.getElementById('reportsGrid');
+    if(reports.length === 0) {
+      grid.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><div>Aucun rapport publié pour le moment</div><div style="font-size:13px;margin-top:8px;">Créez votre premier rapport en cliquant sur "Nouveau Rapport"</div></div>`;
+      return;
+    }
+
+    grid.innerHTML = reports.map(r => {
+      const scoreClass = r.avg >= 7 ? 'high' : r.avg >= 5 ? 'mid' : 'low';
+      const cardClass = r.avg >= 7 ? 'success' : r.avg >= 5 ? 'warning' : 'danger';
+
+      const criteriaHTML = r.scores.map((s, i) => {
+        if(s === null) return '';
+        return `<div class="crit-item">${criteriaNames[i].split(' ')[0]}: <span>${s}/10</span></div>`;
+      }).filter(Boolean).join('');
+
+      return `
+        <div class="report-card ${cardClass}">
+          <div class="card-header">
+            <div>
+              <div class="player-name">${r.prenom} ${r.nom}</div>
+            </div>
+            <div class="score-badge ${scoreClass}">${r.avg}/10</div>
+          </div>
+          <div class="card-criteria">${criteriaHTML}</div>
+          ${r.desc ? `<div class="card-desc">${r.desc}</div>` : ''}
+          <div class="card-date">Publié le ${r.date}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function showFlash(msg) {
+    const el = document.createElement('div');
+    el.className = 'flash';
+    el.textContent = '✓ ' + msg;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 3000);
+  }
+
+  // Prevent scores > 10
+  document.querySelectorAll('.score-input').forEach(input => {
+    input.addEventListener('blur', function() {
+      let v = clamp(this.value);
+      if(v !== null) this.value = v;
+      updateAverage();
+    });
+  });
+</script>
+</body>
+</html>
